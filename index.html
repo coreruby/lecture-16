@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Explicit & Implicit Conversions</title>
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="css/reveal.css" rel="stylesheet" />
+    <link href="css/simple.css" rel="stylesheet" />
+    <link href="css/googlecode.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section class="center" data-background="#000">
+  <h2 class="white">
+    Explicit & Implicit Conversions
+  </h2>
+</section>
+<section class="center">
+  <p>
+    Next Thursday, be on time
+  </p>
+</section>
+<section class="center">
+  <p>
+    We have a guest lecture by Radoslav Stankov
+  </p>
+</section>
+<section class="center" data-background="#000">
+  <h2 class="white">
+    Questions
+  </h2>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def element(**attributes)
+  attributes
+end </code></pre>
+</section>
+<section class="center">
+  <p>
+    What is a scope gate?
+  </p>
+</section>
+<section class="center">
+  <p>
+    Which are the keywords that introduce scope gates?
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def feed(*meals)
+  super
+end </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def feed(*meals)
+  super()
+end </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def feed(*)
+  super
+end </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+
+def o.to_a
+  [o]
+end </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+
+class << o
+  def to_a
+    [o]
+  end
+end </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">result = class Foo
+  self
+end
+
+Foo == result </code></pre>
+</section>
+<section class="center">
+  <p>
+    What does instance_eval does?
+  </p>
+</section>
+<section class="center">
+  <p>
+    What does class_eval does?
+  </p>
+</section>
+<section class="center">
+  <p>
+    What's the difference?
+  </p>
+</section>
+<section class="center">
+  <p>
+    What's an eigenclass
+  </p>
+</section>
+<section class="center">
+  <img class="inline" src="img/troll.png" />
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">Object.superclass </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">BasicObject.superclass </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">Class.new.superclass </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">Class.new(Array).superclass </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">A = Class.new
+B = Class.new(A)
+
+A.singleton_class.superclass == # ? </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">A = Class.new
+B = Class.new(B)
+
+A.singleton_class.superclass == B.singleton_class </code></pre>
+</section>
+<section class="center">
+  <img class="inline" src="img/troll.png" />
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">A = Class.new
+B = Class.new(B)
+
+B.singleton_class.superclass == A.singleton_class </code></pre>
+</section>
+<section class="center" data-background="#000">
+  <p class="white">
+    The super class of the singleton class is the singleton class of the super class
+  </p>
+</section>
+<section class="center" data-background="#F00">
+  <h2 class="white">
+    Explicit & Implicit Conversions
+  </h2>
+</section>
+<section class="center">
+  <h2>
+    #to_s vs #to_str
+  </h2>
+</section>
+<section>
+  <h2>
+    #to_str
+  </h2>
+  <p>
+    Synonym for String#to_s
+  </p>
+</section>
+<section class="center">
+  <img class="inline" src="img/troll.png" />
+</section>
+<section>
+  <h2>
+    #to_str
+  </h2>
+  <p>
+    #to_str is used by methods such as String#concat to convert their arguments to a string
+  </p>
+</section>
+<section>
+  <h2>
+    #to_str
+  </h2>
+  <p>
+    Unlike #to_s, which is supported by almost all classes
+  </p>
+</section>
+<section>
+  <h2>
+    #to_str
+  </h2>
+  <p>
+    #to_str is normally implemented only by classes that act like strings
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">"foo" + Object.new #=> TypeError: no implicit conversion of Object into String </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">str = Object.new
+def str.to_str() "bar" end
+
+"foo" + str #=> "foobar" </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">str = Object.new
+def str.to_str() "bar" end
+
+"foo" << str #=> "foobar" </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">str = Object.new
+def str.to_str() "bar" end
+
+"foo".concat(str) #=> "foobar" </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">str = Object.new
+def str.to_str() "bar" end
+
+raise str #=> RuntimeError: bar </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">str = Object.new
+def str.to_str() "bar" end
+
+String(str) #=> "bar" </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">"foo" + Object.new #=> TypeError: no implicit conversion of Object into String </code></pre>
+</section>
+<section class="center">
+  <h2>
+    #to_a vs #to_ary
+  </h2>
+</section>
+<section>
+  <h2>
+    #to_ary
+  </h2>
+  <p>
+    Indicates an object is Array-like
+  </p>
+</section>
+<section>
+  <h2>
+    #to_ary
+  </h2>
+  <p>
+    Used by array destructuring
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">ary = Object.new
+def ary.to_ary() [1, 2, [3, 4]] end
+
+a, b, (c, d) = ary
+
+a #=> 1
+b #=> 2
+c #=> 3
+d #=> 4 </code></pre>
+</section>
+<section>
+  <h2>
+    #to_a
+  </h2>
+  <p>
+    Used by the splay operator
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">a = Object.new
+def a.to_a() [1, 2] end
+
+c, d = *a
+
+c #=> 1
+d #=> 2 </code></pre>
+</section>
+<section class="center">
+  <h2>
+    #to_int vs #to_i
+  </h2>
+</section>
+<section>
+  <h2>
+    #to_int
+  </h2>
+  <p>
+    Indicates an object is Integer-like
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">['a', 'b', 'c'][Object.new] #=> TypeError: no implicit conversion of Object into Integer </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+def o.to_int() 2 end
+
+[0, 1, 2, 3][o] #=> 2 </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+def o.to_int() 2 end
+
+foo * 2 #=> ["foo", "foo"] </code></pre>
+</section>
+<section class="center">
+  <h2>
+    #to_h vs #to_hash
+  </h2>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def foo(**kw)
+  kw.class
+end
+
+foo(a: 1, b: 2) #=> Hash </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def foo(**kw)
+  kw.class
+end
+
+foo(**{a: 1, b: 2}) #=> Hash </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def foo(**kw)
+  kw.class
+end
+
+foo(**{a: 1, b: 2}) #=> Hash </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def foo(**kw)
+  kw.class
+end
+
+foo(**Object.new) #=> TypeError: no implicit conversion of Object into Hash </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">class DifferentHash < Hash
+  def to_hash
+    self
+  end
+end
+
+foo(**DifferentHash.new) #=> DifferentHash </code></pre>
+</section>
+<section class="center">
+  <h2>
+    #to_proc
+  </h2>
+</section>
+<section>
+  <h2>
+    #to_proc
+  </h2>
+  <p>
+    Used by &
+  </p>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">def foo(&b) b.call end
+
+foo(&Object.new) #=> TypeError: wrong argument type Object (expected Proc) </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+def o.to_proc
+  -> { 42 }
+end
+
+foo(&o) #=> 42 </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+def o.to_proc
+  -> { 42 }
+end
+
+foo &o #=> 42 </code></pre>
+</section>
+<section class="center">
+  <pre><code class="ruby" contenteditable="true">o = Object.new
+def o.to_proc
+  -> { 42 }
+end
+
+foo & o #=> NoMethodError: undefined method `call' for nil:NilClass` </code></pre>
+</section>
+<section class="center">
+  <img class="inline" src="img/troll.png" />
+</section>
+<section class="center" data-background="#000">
+  <p class="white">
+    Converting arguments to their parameter type creates a more flexible API
+  </p>
+</section>
+<section data-background="http://replygif.net/i/411.gif"></section>
+      </div>
+    </div>
+    <script src="js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script type="text/javascript">
+      Reveal.initialize({
+        width:  '100%',
+        height: '100%',
+        margin: 0.05,
+        controls: false,
+        progress: false,
+        history: true,
+        center: false,
+        rollingLinks: true,
+        transition: 'none',
+        backgroundTransition: 'none',
+        dependencies: [
+          {
+            src: 'js/highlight.js',
+            async: true,
+            callback: function() {
+              hljs.configure({ languages: ['ruby'] });
+              hljs.initHighlightingOnLoad();
+            }
+          }
+        ]
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,383 @@
+section.center data-background="#000"
+  h2.white Explicit & Implicit Conversions
+
+section.center
+  p Next Thursday, be on time
+
+section.center
+  p We have a guest lecture by Radoslav Stankov
+
+section.center data-background="#000"
+  h2.white Questions
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def element(**attributes)
+        attributes
+      end
+
+section.center
+  p What is a scope gate?
+
+section.center
+  p Which are the keywords that introduce scope gates?
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def feed(*meals)
+        super
+      end
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def feed(*meals)
+        super()
+      end
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def feed(*)
+        super
+      end
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+
+      def o.to_a
+        [o]
+      end
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+
+      class << o
+        def to_a
+          [o]
+        end
+      end
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      result = class Foo
+        self
+      end
+
+      Foo == result
+
+section.center
+  p What does instance_eval does?
+
+section.center
+  p What does class_eval does?
+
+section.center
+  p What's the difference?
+
+section.center
+  p What's an eigenclass
+
+section.center
+  img.inline src="img/troll.png"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      Object.superclass
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      BasicObject.superclass
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      Class.new.superclass
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      Class.new(Array).superclass
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      A = Class.new
+      B = Class.new(A)
+
+      A.singleton_class.superclass == # ?
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      A = Class.new
+      B = Class.new(B)
+
+      A.singleton_class.superclass == B.singleton_class
+
+section.center
+  img.inline src="img/troll.png"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      A = Class.new
+      B = Class.new(B)
+
+      B.singleton_class.superclass == A.singleton_class
+
+section.center data-background="#000"
+  p.white The super class of the singleton class is the singleton class of the super class
+
+section.center data-background="#F00"
+  h2.white Explicit & Implicit Conversions
+
+section.center
+  h2 #to_s vs #to_str
+
+section
+  h2 #to_str
+  p Synonym for String#to_s
+
+section.center
+  img.inline src="img/troll.png"
+
+section
+  h2 #to_str
+  p #to_str is used by methods such as String#concat to convert their arguments to a string
+
+section
+  h2 #to_str
+  p Unlike #to_s, which is supported by almost all classes
+
+section
+  h2 #to_str
+  p #to_str is normally implemented only by classes that act like strings
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      "foo" + Object.new #=> TypeError: no implicit conversion of Object into String
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      str = Object.new
+      def str.to_str() "bar" end
+
+      "foo" + str #=> "foobar"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      str = Object.new
+      def str.to_str() "bar" end
+
+      "foo" << str #=> "foobar"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      str = Object.new
+      def str.to_str() "bar" end
+
+      "foo".concat(str) #=> "foobar"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      str = Object.new
+      def str.to_str() "bar" end
+
+      raise str #=> RuntimeError: bar
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      str = Object.new
+      def str.to_str() "bar" end
+
+      String(str) #=> "bar"
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      "foo" + Object.new #=> TypeError: no implicit conversion of Object into String
+
+section.center
+  h2 #to_a vs #to_ary
+
+section
+  h2 #to_ary
+  p Indicates an object is Array-like
+
+section
+  h2 #to_ary
+  p Used by array destructuring
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      ary = Object.new
+      def ary.to_ary() [1, 2, [3, 4]] end
+
+      a, b, (c, d) = ary
+
+      a #=> 1
+      b #=> 2
+      c #=> 3
+      d #=> 4
+
+section
+  h2 #to_a
+  p Used by the splay operator
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      a = Object.new
+      def a.to_a() [1, 2] end
+
+      c, d = *a
+
+      c #=> 1
+      d #=> 2
+
+section.center
+  h2 #to_int vs #to_i
+
+section
+  h2 #to_int
+  p Indicates an object is Integer-like
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      ['a', 'b', 'c'][Object.new] #=> TypeError: no implicit conversion of Object into Integer
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+      def o.to_int() 2 end
+
+      [0, 1, 2, 3][o] #=> 2
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+      def o.to_int() 2 end
+
+      foo * 2 #=> ["foo", "foo"]
+
+section.center
+  h2 #to_h vs #to_hash
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def foo(**kw)
+        kw.class
+      end
+
+      foo(a: 1, b: 2) #=> Hash
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def foo(**kw)
+        kw.class
+      end
+
+      foo(**{a: 1, b: 2}) #=> Hash
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def foo(**kw)
+        kw.class
+      end
+
+      foo(**{a: 1, b: 2}) #=> Hash
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def foo(**kw)
+        kw.class
+      end
+
+      foo(**Object.new) #=> TypeError: no implicit conversion of Object into Hash
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      class DifferentHash < Hash
+        def to_hash
+          self
+        end
+      end
+
+      foo(**DifferentHash.new) #=> DifferentHash
+
+section.center
+  h2 #to_proc
+
+section
+  h2 #to_proc
+  p Used by &
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      def foo(&b) b.call end
+
+      foo(&Object.new) #=> TypeError: wrong argument type Object (expected Proc)
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+      def o.to_proc
+        -> { 42 }
+      end
+
+      foo(&o) #=> 42
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+      def o.to_proc
+        -> { 42 }
+      end
+
+      foo &o #=> 42
+
+section.center
+  pre: code.ruby contenteditable="true"
+    '
+      o = Object.new
+      def o.to_proc
+        -> { 42 }
+      end
+
+      foo & o #=> NoMethodError: undefined method `call' for nil:NilClass`
+
+section.center
+  img.inline src="img/troll.png"
+
+section.center data-background="#000"
+  p.white Converting arguments to their parameter type creates a more flexible API
+
+section data-background="http://replygif.net/i/411.gif"
